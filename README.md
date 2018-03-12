@@ -1,7 +1,7 @@
 README.md
 # Snowy Owl - Headstart
 
-# purescript-routing-example
+Based on purescript-routing-example
 
 An example of purescript-routing and purescript-halogen
 
