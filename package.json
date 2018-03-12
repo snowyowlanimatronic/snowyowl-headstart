@@ -1,0 +1,28 @@
+{
+  "name": "purescript-routing-example",
+  "version": "0.1.0",
+  "description": "Brief example of purescript-routing",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "pulp build --to app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/parsonsmatt/purescript-routing-example.git"
+  },
+  "author": "Matt Parsons",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/parsonsmatt/purescript-routing-example/issues"
+  },
+  "homepage": "https://github.com/parsonsmatt/purescript-routing-example#readme",
+  "dependencies": {
+    "purescript": "^0.11.6",
+    "purescript-psa": "0.5.1",
+    "pulp": "^11.0.0"
+  }
+}
