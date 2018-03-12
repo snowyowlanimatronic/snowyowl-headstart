@@ -5,7 +5,7 @@ import Routing (matchesAff)
 import Routing.Match (Match)
 import Routing.Match.Class (lit, num)
 import Component.Profile as Profile
-import Component.Sessions as Sessions
+import Component.Items as Items
 import Halogen as H
 import Halogen.Aff as HA
 import Halogen.HTML as HH
@@ -25,7 +25,7 @@ data CRUD
 
 data Routes
   = Profile
-  | Sessions CRUD
+  | Items CRUD
   | Home
 
 init :: State
@@ -33,12 +33,12 @@ init = { currentPage: "Home" }
 
 routing :: Match Routes
 routing = profile
-      <|> sessions
+      <|> items
       <|> home
   where
     profile = Profile <$ route "profile"
     home = Home <$ lit ""
-    sessions = Sessions <$> (route "sessions" *> parseCRUD)
+    items = Items <$> (route "items" *> parseCRUD)
     route str = lit "" *> lit str
     parseCRUD = Show <$> num <|> pure Index
 
@@ -46,14 +46,14 @@ type State =
   { currentPage :: String
   }
 
-type ChildQuery = Coproduct Profile.Input Sessions.Input
-type ChildSlot = Either Profile.Slot Sessions.Slot
+type ChildQuery = Coproduct Profile.Input Items.Input
+type ChildSlot = Either Profile.Slot Items.Slot
 
 pathToProfile :: ChildPath Profile.Input ChildQuery Profile.Slot ChildSlot
 pathToProfile = cpL
 
-pathToSessions :: ChildPath Sessions.Input ChildQuery Sessions.Slot ChildSlot
-pathToSessions = cpR
+pathToItems :: ChildPath Items.Input ChildQuery Items.Slot ChildSlot
+pathToItems = cpR
 
 type QueryP
   = Coproduct Input ChildQuery
@@ -70,15 +70,15 @@ ui = H.parentComponent
     render st =
       HH.div_
         [ HH.h1_ [ HH.text (st.currentPage) ]
-        , HH.ul_ (map link ["Sessions", "Profile", "Home"])
+        , HH.ul_ (map link ["Items", "Profile", "Home"])
         , viewPage st.currentPage
         ]
 
     link s = HH.li_ [ HH.a [ HP.href ("#/" <> toLower s) ] [ HH.text s ] ]
 
     viewPage :: String -> H.ParentHTML Input ChildQuery ChildSlot m
-    viewPage "Sessions" =
-      HH.slot' pathToSessions Sessions.Slot Sessions.ui unit absurd
+    viewPage "Items" =
+      HH.slot' pathToItems Items.Slot Items.ui unit absurd      
     viewPage "Profile" =
       HH.slot' pathToProfile Profile.Slot Profile.ui unit absurd
     viewPage _ =
@@ -88,11 +88,11 @@ ui = H.parentComponent
     eval (Goto Profile next) = do
       modify (_ { currentPage = "Profile" })
       pure next
-    eval (Goto (Sessions view) next) = do
+    eval (Goto (Items view) next) = do
       modify case view of
-                  Index -> (_ { currentPage = "Sessions" })
-                  Show n -> (_ { currentPage = "Session " <> show n })
-      pure next
+                  Index -> (_ { currentPage = "Items" })
+                  Show n -> (_ { currentPage = "Item " <> show n })
+      pure next      
     eval (Goto Home next) = do
       modify (_ { currentPage = "Home" })
       pure next
@@ -113,5 +113,5 @@ redirects driver _ =
 --   driver (left (action (Goto Home))))
 -- redirects driver _ Profile =
 --   driver (left (action (Goto Profile))))
--- redirects driver _ (Sessions view) =
---   driver (left (action (Goto (Sessions view)))))
+-- redirects driver _ (Items view) =
+--   driver (left (action (Goto (Items view)))))

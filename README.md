@@ -17,6 +17,9 @@ To run the project (currently up-to-date for Purescript 0.11.6):
 # Build
 > npm run build
 
+# Serve
+> pulp server
+
 # Open the test page
-> open index.html
+> http://localhost:1337/index.html
 ```
